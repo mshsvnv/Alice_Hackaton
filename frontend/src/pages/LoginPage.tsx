@@ -1,10 +1,12 @@
 /**
  * Страница входа / регистрации.
+ * Стиль: Yandex AI Studio — минимализм, профессионализм, лаконичность.
  */
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Icon } from '../components/Icon';
 
 export const LoginPage: React.FC = () => {
   const { login, register } = useAuth();
@@ -48,7 +50,9 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="login-page">
       <div className="login-card">
-        <div className="login-card__logo">🎓</div>
+        <div className="login-card__logo">
+          <Icon name="app" size="lg" style={{ color: '#fff' }} aria-label="Алиса" />
+        </div>
         <h1 className="login-card__title">Доступное Обучение</h1>
         <p className="login-card__subtitle">Платформа адаптивного тестирования с Алисой</p>
 

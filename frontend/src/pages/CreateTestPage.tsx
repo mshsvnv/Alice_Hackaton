@@ -1,5 +1,6 @@
 /**
  * Страница создания теста — пошаговый интерфейс.
+ * Стиль: Yandex AI Studio — минимализм, профессионализм, лаконичность.
  *
  * Шаги:
  * 1. Ввод названия и текста теста (или загрузка файла) + динамическое превью
@@ -17,6 +18,7 @@ import {
   type TestQuestion,
   type TestResponse,
 } from '../api/types';
+import { Icon } from '../components/Icon';
 
 type CreationStep = 'input' | 'adapt' | 'result';
 
@@ -266,11 +268,15 @@ export const CreateTestPage: React.FC = () => {
           <div className="steps-indicator__track" />
           <div className="steps-indicator__progress steps-indicator__progress--step-3" />
           <div className="step-item step-item--done">
-            <div className="step-item__circle">✓</div>
+            <div className="step-item__circle">
+              <Icon name="check" size="xs" style={{ color: '#fff' }} aria-hidden />
+            </div>
             <div className="step-item__label">Текст</div>
           </div>
           <div className="step-item step-item--done">
-            <div className="step-item__circle">✓</div>
+            <div className="step-item__circle">
+              <Icon name="check" size="xs" style={{ color: '#fff' }} aria-hidden />
+            </div>
             <div className="step-item__label">Адаптация</div>
           </div>
           <div className="step-item step-item--active">
@@ -281,7 +287,10 @@ export const CreateTestPage: React.FC = () => {
 
         <div className="card" style={{ marginTop: 16 }}>
           <div className="card__header">
-            <span className="card__title">✅ Тест создан!</span>
+            <span className="card__title" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Icon name="check" size="sm" style={{ color: 'var(--color-success)' }} aria-hidden />
+              Тест создан
+            </span>
           </div>
 
           <div style={{ marginBottom: 16 }}>
@@ -325,7 +334,11 @@ export const CreateTestPage: React.FC = () => {
                   {window.location.origin}/share/{createdTest.share_link}
                 </span>
                 <button className="btn btn--sm btn--primary" onClick={handleCopyLink}>
-                  {copied ? '✅ Скопировано' : '📋 Копировать'}
+                  {copied ? (
+                    <><Icon name="check" size="xs" /> Скопировано</>
+                  ) : (
+                    <><Icon name="copy" size="xs" /> Копировать</>
+                  )}
                 </button>
               </div>
             </div>
@@ -361,11 +374,15 @@ export const CreateTestPage: React.FC = () => {
         <div className="steps-indicator__track" />
         <div className={`steps-indicator__progress steps-indicator__progress--step-${step === 'input' ? '1' : step === 'adapt' ? '2' : '3'}`} />
         <div className={`step-item ${step === 'input' ? 'step-item--active' : 'step-item--done'}`}>
-          <div className="step-item__circle">{step === 'input' ? '1' : '✓'}</div>
+          <div className="step-item__circle">
+            {step === 'input' ? '1' : <Icon name="check" size="xs" style={{ color: '#fff' }} aria-hidden />}
+          </div>
           <div className="step-item__label">Текст</div>
         </div>
         <div className={`step-item ${step === 'adapt' ? 'step-item--active' : step === 'result' ? 'step-item--done' : ''}`}>
-          <div className="step-item__circle">{step === 'adapt' ? '2' : step === 'result' ? '✓' : '2'}</div>
+          <div className="step-item__circle">
+            {step === 'adapt' ? '2' : step === 'result' ? <Icon name="check" size="xs" style={{ color: '#fff' }} aria-hidden /> : '2'}
+          </div>
           <div className="step-item__label">Адаптация</div>
         </div>
         <div className={`step-item ${step === 'result' ? 'step-item--active' : ''}`}>
@@ -388,19 +405,19 @@ export const CreateTestPage: React.FC = () => {
                   className={`login-tabs__btn ${inputMode === 'file' ? 'login-tabs__btn--active' : ''}`}
                   onClick={() => setInputMode('file')}
                 >
-                  📁 Загрузить файл
+                  <Icon name="file" size="xs" /> Загрузить файл
                 </button>
                 <button
                   className={`login-tabs__btn ${inputMode === 'text' ? 'login-tabs__btn--active' : ''}`}
                   onClick={() => setInputMode('text')}
                 >
-                  ✏️ Ввести текст
+                  <Icon name="edit" size="xs" /> Ввести текст
                 </button>
                 <button
                   className={`login-tabs__btn ${inputMode === 'generate' ? 'login-tabs__btn--active' : ''}`}
                   onClick={() => setInputMode('generate')}
                 >
-                  🤖 Генерация из конспекта
+                  <Icon name="robot" size="xs" /> Генерация из конспекта
                 </button>
               </div>
 
@@ -434,18 +451,24 @@ export const CreateTestPage: React.FC = () => {
                     />
                     {uploading ? (
                       <>
-                        <div className="upload-zone__icon">⏳</div>
+                        <div className="upload-zone__icon">
+                          <Icon name="clock" size="lg" style={{ color: 'var(--color-text-muted)' }} aria-hidden />
+                        </div>
                         <div className="upload-zone__text">Загрузка...</div>
                       </>
                     ) : uploadedDocId ? (
                       <>
-                        <div className="upload-zone__icon">✅</div>
+                        <div className="upload-zone__icon">
+                          <Icon name="check" size="lg" style={{ color: 'var(--color-success)' }} aria-hidden />
+                        </div>
                         <div className="upload-zone__text">Документ загружен (ID: {uploadedDocId.slice(0, 8)}...)</div>
                         <div className="upload-zone__hint">Нажмите, чтобы загрузить другой</div>
                       </>
                     ) : (
                       <>
-                        <div className="upload-zone__icon">📁</div>
+                        <div className="upload-zone__icon">
+                          <Icon name="upload" size="lg" style={{ color: 'var(--color-text-muted)' }} aria-hidden />
+                        </div>
                         <div className="upload-zone__text">Нажмите или перетащите файл</div>
                         <div className="upload-zone__hint">PDF, DOCX, TXT, изображения</div>
                       </>
@@ -467,8 +490,8 @@ export const CreateTestPage: React.FC = () => {
                     onChange={(e) => setTestText(e.target.value)}
                   />
                   {parsing && (
-                    <div style={{ fontSize: 13, color: 'var(--color-text-secondary)', marginTop: 4 }}>
-                      ⏳ Распознавание вопросов...
+                    <div style={{ fontSize: 13, color: 'var(--color-text-secondary)', marginTop: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Icon name="clock" size="xs" aria-hidden /> Распознавание вопросов...
                     </div>
                   )}
                   {parseError && !parsing && (
@@ -498,18 +521,24 @@ export const CreateTestPage: React.FC = () => {
                     />
                     {genUploading ? (
                       <>
-                        <div className="upload-zone__icon">⏳</div>
+                        <div className="upload-zone__icon">
+                          <Icon name="clock" size="lg" style={{ color: 'var(--color-text-muted)' }} aria-hidden />
+                        </div>
                         <div className="upload-zone__text">Загрузка...</div>
                       </>
                     ) : genFileText ? (
                       <>
-                        <div className="upload-zone__icon">✅</div>
+                        <div className="upload-zone__icon">
+                          <Icon name="check" size="lg" style={{ color: 'var(--color-success)' }} aria-hidden />
+                        </div>
                         <div className="upload-zone__text">Конспект загружен</div>
                         <div className="upload-zone__hint">Нажмите, чтобы загрузить другой</div>
                       </>
                     ) : (
                       <>
-                        <div className="upload-zone__icon">📄</div>
+                        <div className="upload-zone__icon">
+                          <Icon name="document" size="lg" style={{ color: 'var(--color-text-muted)' }} aria-hidden />
+                        </div>
                         <div className="upload-zone__text">Загрузите конспект для генерации вопросов</div>
                         <div className="upload-zone__hint">PDF, DOCX, TXT, изображения</div>
                       </>
@@ -534,8 +563,8 @@ export const CreateTestPage: React.FC = () => {
 
                   {/* Настройки генерации */}
                   <div className="generate-questions" style={{ marginTop: 12, padding: '12px 0', borderTop: '1px solid var(--color-border)' }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'var(--color-text-secondary)' }}>
-                      ⚙️ Настройки генерации
+                    <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Icon name="settings" size="xs" aria-hidden /> Настройки генерации
                     </div>
                     <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
                       <select
@@ -566,7 +595,11 @@ export const CreateTestPage: React.FC = () => {
                         onClick={handleGenerate}
                         style={{ whiteSpace: 'nowrap' }}
                       >
-                        {generating ? '⏳ Генерация...' : '✨ Сгенерировать'}
+                        {generating ? (
+                          <><Icon name="clock" size="xs" /> Генерация...</>
+                        ) : (
+                          <><Icon name="sparkles" size="xs" /> Сгенерировать</>
+                        )}
                       </button>
                     </div>
                     {genError && !generating && (
@@ -584,7 +617,7 @@ export const CreateTestPage: React.FC = () => {
                 disabled={!canGoToAdapt()}
                 onClick={handleGoToAdapt}
               >
-                Далее →
+                Далее
               </button>
             </div>
           </div>
@@ -593,12 +626,17 @@ export const CreateTestPage: React.FC = () => {
           <div className="create-test-preview">
             <div className="card">
               <div className="card__header">
-                <span className="card__title">👁️ Превью теста</span>
+                <span className="card__title" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Icon name="eye" size="sm" style={{ color: 'var(--color-text-secondary)' }} aria-hidden />
+                  Превью теста
+                </span>
               </div>
 
               {parsedQuestions.length === 0 ? (
                 <div className="test-preview__empty">
-                  <div className="test-preview__empty-icon">📝</div>
+                  <div className="test-preview__empty-icon">
+                    <Icon name="document" size="xl" style={{ color: 'var(--color-text-muted)', opacity: 0.5 }} aria-hidden />
+                  </div>
                   <div className="test-preview__empty-text">
                     {inputMode === 'text'
                       ? 'Введите текст теста слева — здесь появится превью распознанных вопросов'
@@ -640,12 +678,15 @@ export const CreateTestPage: React.FC = () => {
       {step === 'adapt' && (
         <div className="card" style={{ marginTop: 16 }}>
           <div className="card__header">
-            <span className="card__title">⚙️ Настройки адаптации</span>
+            <span className="card__title" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Icon name="settings" size="sm" style={{ color: 'var(--color-text-secondary)' }} aria-hidden />
+              Настройки адаптации
+            </span>
           </div>
 
           <div style={{ marginBottom: 16 }}>
             <p style={{ fontSize: 14, color: 'var(--color-text-secondary)' }}>
-              Тест: <strong>{title}</strong> • {parsedQuestions.length} вопросов
+              Тест: <strong>{title}</strong> &middot; {parsedQuestions.length} вопросов
             </p>
           </div>
 
@@ -665,7 +706,9 @@ export const CreateTestPage: React.FC = () => {
 
           {disabilityType !== 'none' && (
             <div className="adaptation-info">
-              <div className="adaptation-info__icon">ℹ️</div>
+              <div className="adaptation-info__icon">
+                <Icon name="info" size="sm" style={{ color: '#1565c0' }} aria-hidden />
+              </div>
               <div className="adaptation-info__text">
                 {disabilityType === 'vision' && 'Будут добавлены аудио-описания для слабовидящих пользователей.'}
                 {disabilityType === 'motor' && 'Будут добавлены аудио-описания и голосовое управление для удобства навигации.'}
@@ -679,7 +722,7 @@ export const CreateTestPage: React.FC = () => {
               className="btn btn--secondary btn--lg"
               onClick={() => setStep('input')}
             >
-              ← Назад
+              Назад
             </button>
             <button
               className="btn btn--primary btn--lg"
@@ -687,7 +730,7 @@ export const CreateTestPage: React.FC = () => {
               disabled={creating}
               onClick={handleCreate}
             >
-              {creating ? 'Создание...' : '🚀 Создать тест'}
+              {creating ? 'Создание...' : 'Создать тест'}
             </button>
           </div>
         </div>

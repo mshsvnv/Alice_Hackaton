@@ -1,11 +1,13 @@
 /**
  * Страница прохождения теста по ссылке (share link).
+ * Стиль: Yandex AI Studio — минимализм, профессионализм, лаконичность.
  */
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { testApi } from '../api/client';
 import { DISABILITY_LABELS, type TestResponse } from '../api/types';
+import { Icon } from '../components/Icon';
 
 export const SharePage: React.FC = () => {
   const { shareLink } = useParams<{ shareLink: string }>();
@@ -46,7 +48,9 @@ export const SharePage: React.FC = () => {
     return (
       <div className="login-page">
         <div className="login-card" style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>😕</div>
+          <div style={{ marginBottom: 16 }}>
+            <Icon name="search" size="xl" style={{ color: 'var(--color-text-muted)' }} aria-label="Тест не найден" />
+          </div>
           <h2 style={{ marginBottom: 8 }}>Тест не найден</h2>
           <p style={{ color: 'var(--color-text-secondary)', marginBottom: 16 }}>
             Возможно, ссылка устарела или тест был удалён
@@ -62,7 +66,9 @@ export const SharePage: React.FC = () => {
   return (
     <div className="login-page">
       <div className="login-card" style={{ textAlign: 'center' }}>
-        <div className="login-card__logo">📋</div>
+        <div className="login-card__logo">
+          <Icon name="document" size="lg" style={{ color: '#fff' }} aria-label="Тест" />
+        </div>
         <h2 style={{ marginBottom: 8 }}>{test.title}</h2>
         <p style={{ color: 'var(--color-text-secondary)', marginBottom: 4 }}>
           {test.questions.length} вопросов

@@ -1,5 +1,6 @@
 /**
  * Страница прохождения теста.
+ * Стиль: Yandex AI Studio — минимализм, профессионализм, лаконичность.
  * - Голосовой помощник автоматически запускается для тестов со слабовидением и ОДА.
  * - Для когнитивных особенностей: упрощённый интерфейс, без голосового помощника.
  */
@@ -10,6 +11,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { testApi } from '../api/client';
 import { DISABILITY_LABELS, type TestResponse, type TestQuestion } from '../api/types';
 import { VoiceAssistant } from '../components/VoiceAssistant';
+import { Icon } from '../components/Icon';
 
 export const TestRunPage: React.FC = () => {
   const { testId } = useParams<{ testId: string }>();
@@ -149,8 +151,13 @@ export const TestRunPage: React.FC = () => {
     const correctAnswersCount = Object.entries(answers).filter(([qIdx, optIdx]) => test.questions[parseInt(qIdx)]?.correct_option_index === optIdx).length;
     return (
       <div className={`test-result ${isCognitive ? 'test-result--cognitive' : ''}`}>
-        <div style={{ fontSize: 48, marginBottom: 16 }}>
-          {score >= 80 ? '🎉' : score >= 50 ? '👍' : '📚'}
+        <div style={{ marginBottom: 16 }}>
+          <Icon
+            name={score >= 80 ? 'sparkles' : score >= 50 ? 'check' : 'document'}
+            size="xl"
+            style={{ color: score >= 80 ? 'var(--color-success)' : score >= 50 ? 'var(--color-primary)' : 'var(--color-text-muted)' }}
+            aria-label={score >= 80 ? 'Отличный результат' : score >= 50 ? 'Хороший результат' : 'Есть над чем работать'}
+          />
         </div>
         <div className="test-result__score">{score}%</div>
         <div className="test-result__label">
@@ -222,7 +229,8 @@ export const TestRunPage: React.FC = () => {
 
         {question.image_description && (
           <div className="question-card__image-desc">
-            🖼️ {question.image_description}
+            <Icon name="image" size="xs" style={{ marginRight: 4 }} aria-hidden />
+            {question.image_description}
           </div>
         )}
 
@@ -251,7 +259,9 @@ export const TestRunPage: React.FC = () => {
         {/* Подсказка */}
         {hintText && (
           <div className="hint-card" role="alert">
-            <div className="hint-card__icon">💡</div>
+            <div className="hint-card__icon">
+              <Icon name="lightbulb" size="sm" style={{ color: 'var(--color-warning)' }} aria-hidden />
+            </div>
             <div className="hint-card__text">{hintText}</div>
           </div>
         )}
@@ -260,7 +270,7 @@ export const TestRunPage: React.FC = () => {
       <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
         {currentIdx > 0 && (
           <button className="btn btn--secondary btn--lg" style={{ flex: 1 }} onClick={handlePrev}>
-            ← Назад
+            Назад
           </button>
         )}
 
@@ -271,7 +281,7 @@ export const TestRunPage: React.FC = () => {
             onClick={handleVoiceHint}
             title="Получить подсказку"
           >
-            💡 Подсказка
+            <Icon name="lightbulb" size="sm" /> Подсказка
           </button>
         )}
 
@@ -282,7 +292,7 @@ export const TestRunPage: React.FC = () => {
             onClick={handleNext}
             disabled={currentAnswer === undefined}
           >
-            Далее →
+            Далее
           </button>
         ) : (
           <button

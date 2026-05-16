@@ -114,6 +114,9 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
   // ─── Озвучивание нового вопроса при смене ───
   useEffect(() => {
     if (!isActive || !currentQuestion || finished) return;
+    // Не озвучиваем вопрос до завершения приветствия —
+    // handleActivate сам вызовет speakQuestion после инструкций
+    if (!hasWelcomed.current) return;
 
     // Озвучиваем только если вопрос действительно изменился
     if (lastSpokenQuestionIdx.current !== currentQuestionIndex) {

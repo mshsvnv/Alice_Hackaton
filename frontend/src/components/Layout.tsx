@@ -1,16 +1,18 @@
 /**
  * Основной макет приложения с боковой навигацией.
+ * Стиль: Yandex AI Studio — минимализм, профессионализм, лаконичность.
  */
 
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { Icon } from './Icon';
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Главная', icon: '🏠' },
-  { to: '/create', label: 'Создать тест', icon: '➕' },
-  { to: '/profile', label: 'Профиль', icon: '👤' },
+  { to: '/', label: 'Главная', icon: 'home' as const },
+  { to: '/create', label: 'Создать тест', icon: 'add' as const },
+  { to: '/profile', label: 'Профиль', icon: 'user' as const },
 ];
 
 export const Layout: React.FC = () => {
@@ -34,7 +36,9 @@ export const Layout: React.FC = () => {
       {/* Боковая панель */}
       <aside className={`sidebar ${sidebarOpen ? 'sidebar--open' : ''}`}>
         <div className="sidebar__header">
-          <span className="sidebar__logo">🎓</span>
+          <span className="sidebar__logo">
+            <Icon name="app" size="sm" style={{ color: '#fff' }} aria-label="Алиса" />
+          </span>
           <span className="sidebar__title">Алиса</span>
         </div>
 
@@ -49,7 +53,9 @@ export const Layout: React.FC = () => {
               onClick={() => setSidebarOpen(false)}
               end={item.to === '/'}
             >
-              <span className="sidebar__link-icon">{item.icon}</span>
+              <span className="sidebar__link-icon">
+                <Icon name={item.icon} size="sm" />
+              </span>
               {item.label}
             </NavLink>
           ))}
@@ -57,11 +63,13 @@ export const Layout: React.FC = () => {
 
         <div className="sidebar__footer">
           <button className="btn btn--ghost" onClick={toggleTheme} style={{ color: 'var(--color-sidebar-text)', width: '100%', justifyContent: 'flex-start' }}>
-            {theme === 'light' ? '🌙 Тёмная тема' : '☀️ Светлая тема'}
+            <Icon name={theme === 'light' ? 'moon' : 'sun'} size="sm" />
+            <span style={{ marginLeft: 6 }}>{theme === 'light' ? 'Тёмная тема' : 'Светлая тема'}</span>
           </button>
           {user && (
             <button className="btn btn--ghost" onClick={handleLogout} style={{ color: 'var(--color-sidebar-text)', width: '100%', justifyContent: 'flex-start' }}>
-              🚪 Выйти
+              <Icon name="logout" size="sm" />
+              <span style={{ marginLeft: 6 }}>Выйти</span>
             </button>
           )}
         </div>
@@ -75,7 +83,7 @@ export const Layout: React.FC = () => {
             onClick={() => setSidebarOpen(!sidebarOpen)}
             aria-label="Меню"
           >
-            ☰
+            <Icon name="menu" size="md" />
           </button>
           <h1 className="top-bar__title">Доступное Обучение</h1>
           {user && (

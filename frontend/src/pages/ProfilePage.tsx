@@ -1,11 +1,13 @@
 /**
  * Страница профиля пользователя.
+ * Стиль: Yandex AI Studio — минимализм, профессионализм, лаконичность.
  */
 
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { profileApi } from '../api/client';
 import { DISABILITY_LABELS, INTERACTION_LABELS, type DisabilityType, type InteractionMode } from '../api/types';
+import { Icon } from '../components/Icon';
 
 export const ProfilePage: React.FC = () => {
   const { user, updateUser } = useAuth();
@@ -15,6 +17,7 @@ export const ProfilePage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
+  const [copied, setCopied] = useState(false);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,6 +39,14 @@ export const ProfilePage: React.FC = () => {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleCopyId = () => {
+    if (!user?.id) return;
+    navigator.clipboard.writeText(user.id).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   if (!user) return null;
@@ -64,12 +75,13 @@ export const ProfilePage: React.FC = () => {
               <button
                 type="button"
                 className="btn btn--sm btn--primary"
-                onClick={() => {
-                  navigator.clipboard.writeText(user.id);
-                  alert('ID скопирован!');
-                }}
+                onClick={handleCopyId}
               >
-                📋
+                {copied ? (
+                  <><Icon name="check" size="xs" /> Скопировано</>
+                ) : (
+                  <Icon name="copy" size="xs" aria-label="Копировать" />
+                )}
               </button>
             </div>
           </div>
