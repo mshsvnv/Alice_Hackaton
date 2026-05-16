@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.venv/
+venv/
+*.pyc
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+.vite/
+package-lock.json
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Qdrant
+qdrant_storage/
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+coverage/
+
+# Runtime data
+knowledge_base_store.json
+*.log
+
+# Test data
+test_example.txt
+test_short.txt

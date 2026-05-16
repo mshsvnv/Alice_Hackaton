@@ -1,0 +1,224 @@
+openapi: 3.0.3
+info:
+  title: Алиса. Доступное Обучение
+  description: |
+    API бэкенда инклюзивной образовательной платформы
+    с голосовым интерфейсом Алисы.
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Локальный сервер разработки
+
+paths:
+  /auth/register:
+    post:
+      summary: Регистрация нового пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileCreate"
+      responses:
+        "200":
+          description: Профиль создан
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileResponse"
+
+  /auth/profile/{profile_id}:
+    get:
+      summary: Получить профиль пользователя
+      parameters:
+        - name: profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Профиль найден
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileResponse"
+        "404":
+          description: Профиль не найден
+
+  /profiles/:
+    get:
+      summary: Список всех профилей
+      responses:
+        "200":
+          description: Список профилей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProfileResponse"
+
+  /documents/upload:
+    post:
+      summary: Загрузить документ
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Документ загружен и обработан
+
+  /documents/parse-test:
+    post:
+      summary: Парсинг теста из текста
+      parameters:
+        - name: text
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Структурированный тест
+
+  /tests/adapt:
+    post:
+      summary: Создать адаптированный тест
+      parameters:
+        - name: original_test_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: disability_type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [vision, motor, cognitive, none]
+        - name: use_gpt
+          in: query
+          schema:
+            type: boolean
+            default: true
+      responses:
+        "200":
+          description: Адаптированный тест
+
+  /tests/results:
+    post:
+      summary: Сохранить результат теста
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TestResultCreate"
+      responses:
+        "200":
+          description: Результат сохранён
+
+  /analytics/report/{user_profile_id}:
+    get:
+      summary: Сгенерировать отчёт
+      parameters:
+        - name: user_profile_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Персонализированный отчёт
+
+  /alice/webhook:
+    post:
+      summary: Вебхук для навыка Алисы
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AliceRequest"
+      responses:
+        "200":
+          description: Ответ навыка
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AliceResponse"
+
+components:
+  schemas:
+    ProfileCreate:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        disability_type:
+          type: string
+          enum: [vision, motor, cognitive, none]
+          default: none
+        interaction_mode:
+          type: string
+          enum: [voice, text, both]
+          default: both
+        preferences:
+          type: object
+
+    ProfileResponse:
+      allOf:
+        - $ref: "#/components/schemas/ProfileCreate"
+        - type: object
+          properties:
+            id:
+              type: string
+
+    TestResultCreate:
+      type: object
+      required: [user_profile_id, test_id, answers, score]
+      properties:
+        user_profile_id:
+          type: string
+        test_id:
+          type: string
+        answers:
+          type: array
+          items:
+            type: object
+        score:
+          type: number
+
+    AliceRequest:
+      type: object
+      properties:
+        meta:
+          type: object
+        request:
+          type: object
+        session:
+          type: object
+        state:
+          type: object
+        version:
+          type: string
+
+    AliceResponse:
+      type: object
+      properties:
+        response:
+          type: object
+        session_state:
+          type: object
+        version:
+          type: string
