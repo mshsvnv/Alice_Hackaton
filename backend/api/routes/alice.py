@@ -306,11 +306,12 @@ async def _handle_hint_request(
         user_query=query,
         user_profile_id=user_id,
         current_question_text=session_state.get("current_question_text"),
+        question_options=session_state.get("current_question_options"),
     )
     hint = await KnowledgeBaseService.get_hint(hint_request)
 
     response_text = f"Вот что я нашла: {hint.hint_text}"
-    if hint.confidence < 0.3:
+    if hint.confidence < 0.5:
         response_text = f"Попробую объяснить: {hint.hint_text}"
 
     return _make_response(

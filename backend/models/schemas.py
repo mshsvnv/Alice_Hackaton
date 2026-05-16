@@ -130,6 +130,7 @@ class KnowledgeHintRequest(BaseModel):
     user_query: str = Field(..., min_length=1, description="Текст запроса пользователя")
     user_profile_id: str = Field(..., description="Идентификатор профиля пользователя")
     current_question_text: Optional[str] = Field(default=None, description="Текст текущего вопроса теста")
+    question_options: Optional[list[str]] = Field(default=None, description="Варианты ответа на вопрос")
 
 
 class KnowledgeHintResponse(BaseModel):

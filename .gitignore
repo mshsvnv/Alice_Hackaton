@@ -45,5 +45,4 @@ knowledge_base_store.json
 *.log
 
 # Test data
-test_example.txt
-test_short.txt
+test.txt

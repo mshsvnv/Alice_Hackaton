@@ -88,12 +88,12 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
   const hasWelcomed = useRef(false);
   const hasSpokenResult = useRef(false);
   const lastSpokenHintRef = useRef<string | null>(null);
-  const initDoneRef = useRef(false);
   const awaitingFinishConfirm = useRef(false);
   const listeningTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Реф для актуального обработчика команд (избегаем устаревших замыканий)
+  // Рефы для актуальных обработчиков (избегаем устаревших замыканий)
   const handleCommandRef = useRef<(cmd: VoiceCommand) => void>(() => {});
+  const handleActivateRef = useRef<() => void>(() => {});
 
   // Синхронизируем реф с состоянием
   useEffect(() => {
@@ -102,11 +102,10 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
 
   // ─── Автозапуск помощника (для всех тестов) ───
   useEffect(() => {
-    if (initDoneRef.current) return;
-    initDoneRef.current = true;
     // Небольшая задержка, чтобы тест успел загрузиться
+    // Используем реф, чтобы при повторном маунте (StrictMode) вызвать актуальный handleActivate
     const timer = setTimeout(() => {
-      handleActivate();
+      handleActivateRef.current();
     }, 500);
     return () => clearTimeout(timer);
   }, []);
@@ -138,6 +137,9 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
 
   // ─── Активация голосового помощника ───
   const handleActivate = useCallback(async () => {
+    // Защита от повторного запуска (StrictMode / двойной клик)
+    if (hasWelcomed.current || isSpeakingRef.current) return;
+
     setIsActive(true);
     lastSpokenQuestionIdx.current = -1;
     hasSpokenResult.current = false;
@@ -172,6 +174,7 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
   const handleDeactivate = useCallback(() => {
     SpeechService.cancel();
     isSpeakingRef.current = false;
+    hasWelcomed.current = false;
     setIsActive(false);
     setVoiceState('idle');
     setLastTranscript('');
@@ -507,6 +510,11 @@ export const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
   useEffect(() => {
     startListeningRef.current = startListening;
   }, [startListening]);
+
+  // Синхронизируем реф handleActivate с актуальной версией
+  useEffect(() => {
+    handleActivateRef.current = handleActivate;
+  }, [handleActivate]);
 
   // ─── Очистка при размонтировании ───
   useEffect(() => {

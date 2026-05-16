@@ -117,6 +117,7 @@ export const TestRunPage: React.FC = () => {
           user_query: question.text,
           user_profile_id: user.id,
           current_question_text: question.text,
+          question_options: question.options,
         }),
       });
 
