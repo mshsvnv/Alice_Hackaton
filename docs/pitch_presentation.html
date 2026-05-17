@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Алиса.Доступное Обучение</title>
+  <style>
+    @font-face {
+      font-family: 'Yandex Sans';
+      src: url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansText-Regular.woff2') format('woff2'),
+           url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansText-Regular.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Yandex Sans';
+      src: url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansText-Medium.woff2') format('woff2'),
+           url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansText-Medium.woff') format('woff');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Yandex Sans';
+      src: url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansText-Bold.woff2') format('woff2'),
+           url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansText-Bold.woff') format('woff');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Yandex Sans';
+      src: url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansText-Light.woff2') format('woff2'),
+           url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansText-Light.woff') format('woff');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Yandex Sans Display';
+      src: url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansDisplay-Regular.woff2') format('woff2'),
+           url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansDisplay-Regular.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Yandex Sans Display';
+      src: url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansDisplay-Bold.woff2') format('woff2'),
+           url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansDisplay-Bold.woff') format('woff');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Yandex Sans Display';
+      src: url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansDisplay-Light.woff2') format('woff2'),
+           url('https://yastatic.net/s3/home/fonts/yandex-sans/YandexSansDisplay-Light.woff') format('woff');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --yellow: #FFCC00;
+      --yellow-dark: #E6B800;
+      --alice: #7B68EE;
+      --alice-dark: #6A5ACD;
+      --gray-50: #FAFAFA;
+      --gray-100: #F5F5F5;
+      --gray-200: #EEEEEE;
+      --gray-300: #E0E0E0;
+      --gray-400: #BDBDBD;
+      --gray-600: #757575;
+      --gray-800: #424242;
+      --gray-900: #212121;
+      --red: #D32F2F;
+      --green: #2E7D32;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Yandex Sans', 'Yandex Sans Display', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, .s1-brand, .s2-stat-num, .s10 h1 {
+      font-family: 'Yandex Sans Display', 'Yandex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* ===== SLIDE ENGINE ===== */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      padding: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s ease;
+    }
+    .slide.active { opacity: 1; pointer-events: all; }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottomnav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 48px;
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 200;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-600);
+    }
+    .bottomnav-left { display: flex; align-items: center; gap: 16px; }
+    .bottomnav-brand { font-weight: 800; color: var(--black); letter-spacing: -0.3px; }
+    .bottomnav-brand span { color: var(--yellow-dark); }
+    .bottomnav-sep { color: var(--gray-300); }
+    .bottomnav-right { display: flex; align-items: center; gap: 8px; }
+    .nav-btn {
+      width: 32px; height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: var(--gray-800);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover { border-color: var(--black); background: var(--gray-100); }
+    .nav-counter .cur { font-size: 14px; font-weight: 800; color: var(--black); }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress {
+      position: fixed;
+      bottom: 48px; left: 0; right: 0;
+      height: 3px;
+      background: var(--gray-200);
+      z-index: 200;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--alice);
+      transition: width 0.4s ease;
+    }
+
+    /* ============================================================
+       SLIDE 1 — TITLE
+       ============================================================ */
+    .s1 {
+      background: var(--black);
+      color: var(--white);
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px 100px;
+    }
+    .s1 h1 {
+      font-size: 80px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -3px;
+      margin-bottom: 24px;
+    }
+    .s1-brand {
+      color: var(--alice);
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: 0;
+      display: block;
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+    .s1-sub {
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--gray-400);
+      line-height: 1.6;
+      max-width: 560px;
+    }
+    .s1-tags {
+      display: flex;
+      gap: 8px;
+      margin-top: 48px;
+    }
+    .s1-tag {
+      padding: 6px 14px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-400);
+    }
+
+    /* ============================================================
+       SLIDE 2 — PROBLEM
+       ============================================================ */
+    .s2 {
+      flex-direction: row;
+    }
+    .s2-left {
+      flex: 0 0 45%;
+      background: var(--black);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px;
+    }
+    .s2-left h2 {
+      font-size: 44px; font-weight: 800; line-height: 1.1;
+      letter-spacing: -1px; margin-bottom: 32px;
+    }
+    .s2-stat { margin-bottom: 28px; }
+    .s2-stat-num {
+      font-size: 56px; font-weight: 900; letter-spacing: -2px;
+      color: var(--alice); line-height: 1;
+    }
+    .s2-stat-label {
+      font-size: 13px; color: var(--gray-400); margin-top: 4px; font-weight: 500;
+    }
+    .s2-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px;
+      background: var(--white);
+    }
+    .s2-card {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .s2-card:last-child { border-bottom: none; }
+    .s2-card-title {
+      font-size: 18px; font-weight: 700; margin-bottom: 6px; color: var(--black);
+    }
+    .s2-card-text {
+      font-size: 14px; color: var(--gray-600); line-height: 1.6;
+    }
+    .s2-card-bar {
+      width: 40px; height: 3px; background: var(--alice); margin-bottom: 14px;
+    }
+
+    /* ============================================================
+       STEP SLIDES (3-5) — flow with highlighted step
+       ============================================================ */
+    .step-slide {
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 100px;
+    }
+    .step-slide h2 {
+      font-size: 44px; font-weight: 800; letter-spacing: -1px; line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .step-slide .step-subtitle {
+      font-size: 16px; color: var(--gray-600); line-height: 1.6;
+      max-width: 700px; margin-bottom: 56px;
+    }
+
+    /* Flow bar — same on all step slides */
+    .flow-bar {
+      display: flex;
+      gap: 16px;
+    }
+    .flow-item {
+      flex: 1;
+      padding: 40px 36px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      text-align: left;
+      transition: all 0.4s ease;
+    }
+
+    /* Default (inactive) step */
+    .flow-item .flow-num {
+      font-size: 12px; font-weight: 800; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--gray-400); margin-bottom: 12px;
+    }
+    .flow-item .flow-title {
+      font-size: 22px; font-weight: 700; color: var(--gray-400); line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .flow-item .flow-sub {
+      font-size: 14px; color: var(--gray-400); line-height: 1.5;
+    }
+
+    /* Active (highlighted) step */
+    .flow-item.active {
+      background: var(--alice);
+      border-color: var(--alice);
+      transform: scale(1.03);
+      box-shadow: 0 8px 32px rgba(123,104,238,0.3);
+    }
+    .flow-item.active .flow-num {
+      color: rgba(255,255,255,0.6);
+    }
+    .flow-item.active .flow-title {
+      color: var(--white);
+    }
+    .flow-item.active .flow-sub {
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ============================================================
+       SLIDE 6 — TECHNOLOGY (dark variant)
+       ============================================================ */
+    .step-slide.s6-dark {
+      background: #1a1a2e;
+      color: var(--white);
+      padding-left: 140px;
+    }
+    .step-slide.s6-dark h2 {
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .step-slide.s6-dark .step-subtitle {
+      color: rgba(255,255,255,0.5);
+    }
+    .s6-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      background: var(--alice);
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .s6-logo img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+    .s6-cards {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      max-width: 900px;
+    }
+    .s6-card {
+      border-radius: 20px !important;
+      border: 1px solid rgba(123,104,238,0.2) !important;
+      padding: 40px 36px !important;
+      background: rgba(123,104,238,0.08) !important;
+      transform: none !important;
+      box-shadow: 0 4px 24px rgba(123,104,238,0.1) !important;
+      transition: all 0.3s ease !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .s6-card::before {
+      content: '';
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(123,104,238,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .s6-card:hover {
+      background: rgba(123,104,238,0.15) !important;
+      border-color: rgba(123,104,238,0.35) !important;
+      box-shadow: 0 8px 36px rgba(123,104,238,0.2) !important;
+      transform: translateY(-2px) !important;
+    }
+    /* First card spans both rows */
+    .s6-card.s6-main {
+      grid-row: 1 / 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 44px !important;
+      background: rgba(123,104,238,0.12) !important;
+    }
+    .s6-card .flow-title {
+      font-size: 26px !important;
+      font-weight: 800 !important;
+      margin-bottom: 16px !important;
+      color: var(--white) !important;
+      position: relative;
+      padding-left: 20px;
+    }
+    .s6-card .flow-title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 4px;
+      height: calc(100% - 4px);
+      background: var(--alice);
+      border-radius: 2px;
+    }
+    .s6-card .flow-sub {
+      font-size: 15px !important;
+      line-height: 1.6 !important;
+      color: rgba(255,255,255,0.6) !important;
+    }
+    .s6-card.s6-main .flow-title {
+      font-size: 34px !important;
+      margin-bottom: 20px !important;
+      padding-left: 24px;
+    }
+    .s6-card.s6-main .flow-title::before {
+      width: 5px;
+    }
+    .s6-card.s6-main .flow-sub {
+      font-size: 16px !important;
+    }
+
+    /* ============================================================
+       SLIDE 7 — DEMO
+       ============================================================ */
+    .s8 {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: var(--black);
+      position: relative;
+      padding: 0 0 51px 0 !important;
+    }
+    .s8-demo {
+      width: 60vw;
+      max-width: 900px;
+      aspect-ratio: 16/9;
+      background: var(--black);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      margin: auto;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .s8.expanded .s8-demo {
+      width: 100vw;
+      max-width: 100vw;
+      height: calc(100vh - 52px);
+      max-height: calc(100vh - 52px);
+      aspect-ratio: auto;
+      border-radius: 0;
+    }
+    .s8-demo video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: var(--black);
+    }
+    .s8-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.35);
+      transition: opacity 0.3s ease;
+      z-index: 2;
+    }
+    .s8-demo:hover .s8-overlay { background: rgba(0,0,0,0.45); }
+    .s8.expanded .s8-overlay { opacity: 0; pointer-events: none; }
+    .s8-play {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--alice);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      border: none;
+      font-size: 24px;
+      color: var(--white);
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(123,104,238,0.4);
+    }
+    .s8-play:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(123,104,238,0.55); }
+    .s8-close {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--white);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 3;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, background 0.15s;
+    }
+    .s8-close:hover { background: rgba(0,0,0,0.8); }
+    .s8.expanded .s8-close { opacity: 1; pointer-events: all; }
+
+    /* ============================================================
+       SLIDE 8 — STATUS & ROADMAP
+       ============================================================ */
+    .s9 {
+      flex-direction: column;
+      justify-content: center;
+      padding: 72px 100px;
+      background: var(--black);
+      color: var(--white);
+    }
+    .s9 h2 {
+      font-size: 40px; font-weight: 800; letter-spacing: -1px; line-height: 1.1;
+      margin-bottom: 12px;
+      color: var(--white);
+    }
+    .s9 .step-subtitle {
+      font-size: 15px; color: var(--gray-400); line-height: 1.6;
+      max-width: 600px; margin-bottom: 48px;
+    }
+    .s9-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      max-width: 1040px;
+    }
+    .s9-card {
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      padding: 32px 28px;
+      background: var(--white);
+      position: relative;
+    }
+    .s9-card-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .s9-card.s9-main .s9-card-label { color: var(--alice); }
+    .s9-card.s9-dev .s9-card-label { color: var(--gray-600); }
+    .s9-card.s9-biz .s9-card-label { color: #b8860b; }
+    .s9-card-heading {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--black);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .s9-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .s9-list li {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--gray-600);
+      padding: 7px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+    .s9-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 14px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--gray-400);
+    }
+    .s9-card.s9-main .s9-list li::before { background: var(--alice); }
+    .s9-card.s9-biz .s9-list li::before { background: #b8860b; }
+
+    /* ============================================================
+       SLIDE 9 — FINALE
+       ============================================================ */
+    .s10 {
+      background: var(--black);
+      color: var(--white);
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 80px;
+      gap: 60px;
+    }
+    .s10-person {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    .s10-person:first-child {
+      align-self: center;
+      transform: translateY(-40px);
+    }
+    .s10-person:last-child {
+      align-self: center;
+      transform: translateY(40px);
+    }
+    .s10-photo {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(123,104,238,0.3);
+    }
+    .s10-tg {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--white);
+      letter-spacing: 1.5px;
+      text-transform: lowercase;
+      opacity: 0.85;
+    }
+    .s10-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      max-width: 480px;
+    }
+    .s10 h1 {
+      font-size: 64px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .s10 h1 em {
+      font-style: normal;
+      color: var(--alice);
+    }
+    .s10-sub {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--gray-400);
+      max-width: 460px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .s10-cta {
+      padding: 14px 36px;
+      background: var(--alice);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .s10-cta:hover { opacity: 0.9; }
+    .s10-footer {
+      margin-top: 40px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-600);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Progress bar -->
+  <div class="progress"><div class="progress-fill" id="topbarFill" style="width:11.1%"></div></div>
+
+  <!-- Bottom navigation -->
+  <div class="bottomnav">
+    <div class="bottomnav-left">
+      <span class="bottomnav-brand">Яндекс.<span>Образование</span></span>
+      <span class="bottomnav-sep">|</span>
+      <span>Алиса AI 2026</span>
+    </div>
+    <div class="bottomnav-right">
+      <span class="nav-counter"><span class="cur" id="curSlide">1</span>/9</span>
+      <button class="nav-btn" onclick="prevSlide()">&#8592;</button>
+      <button class="nav-btn" onclick="nextSlide()">&#8594;</button>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 1: TITLE ==================== -->
+  <div class="slide s1 active" id="slide-1">
+    <h1><span class="s1-brand">Алиса.</span>Доступное Обучение</h1>
+    <p class="s1-sub">Адаптивная платформа учебного тестирования для людей с ОВЗ на базе Алиса AI и Yandex AI Studio</p>
+    <div class="s1-tags">
+      <span class="s1-tag">Голосовой интерфейс</span>
+      <span class="s1-tag">AI-адаптация</span>
+      <span class="s1-tag">Инклюзивность</span>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 2: PROBLEM ==================== -->
+  <div class="slide s2" id="slide-2">
+    <div class="s2-left">
+      <h2>Образование недоступно для миллионов</h2>
+      <div class="s2-stat">
+        <div class="s2-stat-num">4.3 млн</div>
+        <div class="s2-stat-label">Людей с ОВЗ в России</div>
+      </div>
+      <div class="s2-stat">
+        <div class="s2-stat-num">37%</div>
+        <div class="s2-stat-label">Испытывают проблемы в процессе обучения</div>
+      </div>
+    </div>
+    <div class="s2-right">
+      <div class="s2-card">
+        <div class="s2-card-bar"></div>
+        <div class="s2-card-title">Слабовидение</div>
+        <div class="s2-card-text">Мелкий текст, нет аудио-описаний, недоступные изображения и графики</div>
+      </div>
+      <div class="s2-card">
+        <div class="s2-card-bar"></div>
+        <div class="s2-card-title">Нарушения опорно-двигательного аппарата</div>
+        <div class="s2-card-text">Сложность навигации, множество кликов, отсутствие голосового управления</div>
+      </div>
+      <div class="s2-card">
+        <div class="s2-card-bar"></div>
+        <div class="s2-card-title">Когнитивные особенности</div>
+        <div class="s2-card-text">Сложные формулировки, нет подсказок, непонятные инструкции</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 3: STEP 1 — UPLOAD ==================== -->
+  <div class="slide step-slide" id="slide-3">
+    <h2>Основной сценарий</h2>
+    <p class="step-subtitle">Преподаватель загружает материал в любом удобном формате — система автоматически извлекает вопросы</p>
+    <div class="flow-bar">
+      <div class="flow-item active">
+        <div class="flow-num">Шаг 1</div>
+        <div class="flow-title">Загрузка теста или конспекта</div>
+        <div class="flow-sub">Преподаватель загружает PDF, DOCX или вводит текст — Yandex Vision OCR распознаёт сканы и фото</div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">Шаг 2</div>
+        <div class="flow-title">AI-адаптация</div>
+        <div class="flow-sub">YandexGPT переписывает вопросы под тип ОВЗ пользователя</div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">Шаг 3</div>
+        <div class="flow-title">Готовый тест</div>
+        <div class="flow-sub">Студент проходит тест с голосовым интерфейсом Алисы</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 4: STEP 2 — ADAPTATION ==================== -->
+  <div class="slide step-slide" id="slide-4">
+    <h2>Основной сценарий</h2>
+    <p class="step-subtitle">YandexGPT автоматически переписывает вопросы и варианты ответов под тип ограничений пользователя</p>
+    <div class="flow-bar">
+      <div class="flow-item">
+        <div class="flow-num">Шаг 1</div>
+        <div class="flow-title">Загрузка теста или конспекта</div>
+        <div class="flow-sub">Преподаватель загружает PDF, DOCX или вводит текст — Yandex Vision OCR распознаёт сканы и фото</div>
+      </div>
+      <div class="flow-item active">
+        <div class="flow-num">Шаг 2</div>
+        <div class="flow-title">AI-адаптация</div>
+        <div class="flow-sub">YandexGPT переписывает вопросы под тип ОВЗ: упрощение формулировок, аналогии, сокращение вариантов</div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">Шаг 3</div>
+        <div class="flow-title">Готовый тест</div>
+        <div class="flow-sub">Студент проходит тест с голосовым интерфейсом Алисы</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 5: STEP 3 — READY TEST ==================== -->
+  <div class="slide step-slide" id="slide-5">
+    <h2>Основной сценарий</h2>
+    <p class="step-subtitle">Студент проходит адаптированный тест — Алиса зачитывает вопросы, принимает ответы голосом, даёт подсказки</p>
+    <div class="flow-bar">
+      <div class="flow-item">
+        <div class="flow-num">Шаг 1</div>
+        <div class="flow-title">Загрузка теста или конспекта</div>
+        <div class="flow-sub">Преподаватель загружает PDF, DOCX или вводит текст — Yandex Vision OCR распознаёт сканы и фото</div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-num">Шаг 2</div>
+        <div class="flow-title">AI-адаптация</div>
+        <div class="flow-sub">YandexGPT переписывает вопросы под тип ОВЗ пользователя</div>
+      </div>
+      <div class="flow-item active">
+        <div class="flow-num">Шаг 3</div>
+        <div class="flow-title">Готовый тест</div>
+        <div class="flow-sub">SpeechKit TTS зачитывает вопросы, ASR принимает голосовые ответы</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 6: TECHNOLOGY ==================== -->
+  <div class="slide step-slide s6-dark" id="slide-6">
+    <h2><span class="s6-logo"><img src="image.svg" alt="AI Studio"></span>Интеграция с Yandex AI Studio</h2>
+    <p class="step-subtitle">Три ключевых технологии обеспечивают адаптацию, голосовой интерфейс и распознавание документов</p>
+    <div class="s6-cards">
+      <div class="s6-card s6-main">
+        <div class="flow-title">YandexGPT</div>
+        <div class="flow-sub">Адаптация текста вопросов под тип ОВЗ: упрощение формулировок, аналогии, сокращение вариантов ответов</div>
+      </div>
+      <div class="s6-card">
+        <div class="flow-title">SpeechKit TTS / ASR</div>
+        <div class="flow-sub">Озвучивание вопросов и голосовой ввод ответов — полный голосовой интерфейс</div>
+      </div>
+      <div class="s6-card">
+        <div class="flow-title">Vision (OCR)</div>
+        <div class="flow-sub">Извлечение текста из загруженных PDF и DOCX документов</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 7: DEMO ==================== -->
+  <div class="slide s8" id="slide-7">
+    <div class="s8-demo" id="s8Demo" onclick="toggleDemoExpand()">
+      <video id="demoVideo" src="../alisa_cropped.mp4" preload="metadata" playsinline></video>
+      <div class="s8-overlay" id="s8Overlay">
+        <button class="s8-play" onclick="event.stopPropagation(); playDemo()">&#9654;</button>
+      </div>
+      <button class="s8-close" onclick="event.stopPropagation(); closeDemo()">&#10005;</button>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 8: STATUS & ROADMAP ==================== -->
+  <div class="slide s9" id="slide-8">
+    <h2>Дальнейшее развитие</h2>
+    <p class="step-subtitle">Что уже сделано и что в планах</p>
+    <div class="s9-cards">
+      <div class="s9-card s9-main">
+        <div class="s9-card-label">done</div>
+        <div class="s9-card-heading">Что уже работает</div>
+        <ul class="s9-list">
+          <li>Создание тестов из PDF, DOCX и текста</li>
+          <li>AI-адаптация под 3 типа ОВЗ</li>
+          <li>Голосовой помощник на фронтенде (TTS/ASR)</li>
+          <li>Публичные ссылки на тесты</li>
+        </ul>
+      </div>
+      <div class="s9-card s9-dev">
+        <div class="s9-card-label">in progress</div>
+        <div class="s9-card-heading">Что будет дальше</div>
+        <ul class="s9-list">
+          <li>Полная интеграция навыка Алисы</li>
+          <li>MCP-интеграции (например, с LMS)</li>
+          <li>Поддержка мультимедиа - аудио и видео</li>
+        </ul>
+      </div>
+      <div class="s9-card s9-biz">
+        <div class="s9-card-label">money!!!</div>
+        <div class="s9-card-heading">Коммерциализация</div>
+        <ul class="s9-list">
+          <li>Интеграция с LMS (Moodle)</li>
+          <li>B2B для корпоративного обучения</li>
+          <li>Государственные программы инклюзии</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 9: FINALE ==================== -->
+  <div class="slide s10" id="slide-9">
+    <div class="s10-person">
+      <img class="s10-photo" src="masun1.jpg" alt="masun1">
+      <span class="s10-tg">@akamakfa</span>
+    </div>
+    <div class="s10-center">
+      <h1>Образование<br><em>для всех</em></h1>
+      <p class="s10-sub">Наша платформа делает инклюзивное образование реальностью — не просто чат, а полноценный адаптивный сервис</p>
+      <div class="s10-footer">Алиса.Доступное Обучение &middot; Хакатон Алиса AI 2026</div>
+    </div>
+    <div class="s10-person">
+      <img class="s10-photo" src="masun2.jpg" alt="masun2">
+      <span class="s10-tg">@p_stpn</span>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    const TOTAL = 9;
+    let cur = 1;
+    let demoExpanded = false;
+
+    function showSlide(n) {
+      // If leaving demo slide while expanded, collapse first
+      if (cur === 7 && demoExpanded && n !== 7) closeDemo();
+      document.querySelectorAll('.slide').forEach((s, i) => {
+        s.classList.toggle('active', i + 1 === n);
+      });
+      cur = n;
+      document.getElementById('curSlide').textContent = n;
+      document.getElementById('topbarFill').style.width = `${(n / TOTAL) * 100}%`;
+    }
+
+    function nextSlide() {
+      if (demoExpanded) { closeDemo(); return; }
+      if (cur < TOTAL) { showSlide(cur + 1); }
+    }
+
+    function prevSlide() {
+      if (demoExpanded) { closeDemo(); return; }
+      if (cur > 1) showSlide(cur - 1);
+    }
+
+    function playDemo() {
+      const slide = document.getElementById('slide-7');
+      const video = document.getElementById('demoVideo');
+      slide.classList.add('expanded');
+      demoExpanded = true;
+      video.play().catch(() => {});
+    }
+
+    function closeDemo() {
+      const slide = document.getElementById('slide-7');
+      const video = document.getElementById('demoVideo');
+      slide.classList.remove('expanded');
+      demoExpanded = false;
+      video.pause();
+      video.currentTime = 0;
+    }
+
+    function toggleDemoExpand() {
+      if (demoExpanded) {
+        closeDemo();
+      } else {
+        playDemo();
+      }
+    }
+
+    // Auto-collapse when video ends
+    document.addEventListener('DOMContentLoaded', () => {
+      const video = document.getElementById('demoVideo');
+      if (video) {
+        video.addEventListener('ended', () => {
+          setTimeout(() => { closeDemo(); }, 800);
+        });
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+      else if (e.key === 'Escape' && demoExpanded) { closeDemo(); }
+    });
+
+    let tx = 0;
+    document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+    document.addEventListener('touchend', e => {
+      const d = tx - e.changedTouches[0].clientX;
+      if (Math.abs(d) > 50) { d > 0 ? nextSlide() : prevSlide(); }
+    });
+
+    showSlide(1);
+  </script>
+</body>
+</html>
